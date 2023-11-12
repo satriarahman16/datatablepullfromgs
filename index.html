@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>easyData - open source & free solutions</title>
+    <!-- Icon -->
+    <link
+      rel="icon"
+      href="https://easy-data.mdbgo.io/img/favicon/favicon-32x32.png"
+      type="image/x-icon"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+    />
+    <!-- MDB UI KIT -->
+    <link rel="stylesheet" href="css/mdb.min.css" />
+    <!-- Custom styles -->
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <style></style>
+  </head>
+
+  <body>
+    <!--Main Navigation-->
+    <header class="mb-10">
+      <!-- Navbar-->
+      <nav
+        class="navbar navbar-expand-lg navbar-light bg-white shadow-2 fixed-top"
+      >
+        <div
+          class="
+            container-fluid
+            justify-content-center justify-content-md-between
+          "
+        >
+          <!-- Left elements -->
+          <ul class="navbar-nav flex-row align-items-center">
+            <li class="nav-item me-3 me-lg-1">
+              <a
+                class="nav-link d-flex"
+                href="https://easy-data.mdbgo.io/"
+                target="_blank"
+              >
+                <img
+                  src="https://easy-data.mdbgo.io/img/logo.png"
+                  height="31"
+                  alt=""
+                  loading="lazy"
+                  class="me-2"
+                />
+                <span
+                  style="
+                    font-size: 19px;
+                    font-weight: 500;
+                    color: hsl(0, 0%, 30%);
+                  "
+                  >easy<span class="text-theme">Data</span></span
+                >
+              </a>
+            </li>
+            <li class="nav-item me-3 me-lg-1">
+              <a
+                class="nav-link"
+                href="https://twitter.com/ascensus_mdb"
+                rel="nofollow"
+                target="_blank"
+              >
+                <span><i class="fab fa-twitter"></i></span>
+              </a>
+            </li>
+            <li class="nav-item me-3 me-lg-1">
+              <a
+                class="nav-link"
+                href="https://github.com/mdbootstrap/mdb-easydata"
+                rel="nofollow"
+                target="_blank"
+              >
+                <span><i class="fab fa-github"></i></span>
+              </a>
+            </li>
+          </ul>
+          <!-- Left elements -->
+
+          <!-- Center elements -->
+          <ul class="navbar-nav flex-row d-none d-md-flex">
+            <li class="nav-item me-3 me-lg-1">
+              <a
+                class="nav-link d-flex"
+                href="https://easy-data.mdbgo.io/#section-google-sheets"
+                target="_blank"
+              >
+                <img
+                  src="https://easy-data.mdbgo.io/img/logo-gs.png"
+                  height="22"
+                  class="me-2"
+                  alt=""
+                />
+                <span>Google Sheets example</span>
+              </a>
+            </li>
+          </ul>
+          <!-- Center elements -->
+
+          <!-- Right elements -->
+          <ul class="navbar-nav flex-row d-none d-md-flex">
+            <li class="nav-item me-3 me-lg-1">
+              <a
+                href="https://mdbootstrap.com/"
+                target="_blank"
+                class="
+                  btn btn-primary btn-rounded
+                  mx-2
+                  d-none d-lg-inline-block
+                "
+                ><i class="fas fa-cubes me-2"></i>MDB UI KIT</a
+              >
+            </li>
+          </ul>
+          <!-- Right elements -->
+        </div>
+      </nav>
+      <!-- Navbar -->
+    </header>
+    <!--Main Navigation-->
+
+    <!--Main layout-->
+    <main>
+      <div class="container" >
+
+        <!-- Table -->
+        <div class="text-center">
+          <button class="btn btn-primary" id="reload">Refresh</button>
+        </div>
+        <table class="table table-hover" id="userTable">
+          <thead id="table-head">
+            <th>Tanggal</th>
+            <th>Transaksi</th>
+            <th>Keluar</th>
+            <th>Masuk</th>
+            <th>Saldo</th>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+        <!-- Table -->
+      </div>
+    </main>
+    <!--Main layout-->
+
+    <!--Footer-->
+    <footer></footer>
+    <!--Footer-->
+  </body>
+  <script>
+    document.querySelector('#reload').addEventListener('click',()=>{
+      window.location.reload(true);
+    })
+  </script>
+  <!-- MDB ESSENTIAL -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <!-- Google API -->
+  <script src="https://apis.google.com/js/api.js"></script>
+  <!-- easyData -->
+  <script type="text/javascript" src="js/easyData-google-sheets.js"></script>
+
+  <!-- easyData - Creating table -->
+  <script>
+    {
+      {
+        // Your API KEY
+        const API_KEY = "AIzaSyDjeACJ5kVgVHqQDCorJfSiKcLB7bvkDQo";
+
+        function displayResult2(response) {
+          let tableHead = "";
+          let tableBody = "";
+
+          response.result.values.forEach((row, index) => {
+              tableBody += "<tr>";
+              row.forEach((val) => (tableBody += "<td>" + val + "</td>"));
+              tableBody += "</tr>";
+            }
+          )
+          // document.getElementById("table-head").innerHTML = tableHead;
+          // document.getElementById("table-body").innerHTML = tableBody;
+          
+          $('#userTable').DataTable({
+            "data": response.result.values,
+            columnDefs : [
+              {
+                "targets": "_all",
+                "defaultContent": "-" 
+              }, 
+            ],
+          })      
+        }
+
+        function loadData() {
+          // Spreadsheet ID
+          const spreadsheetId = "1pnD54AQJ6BAkEtJSMt2wF9wdi1p592sc6Me5yNlPUbk";
+          const range = "A2:Z";
+          getPublicValues({ spreadsheetId, range }, displayResult2);
+        }
+
+        window.addEventListener("load", (e) => {
+          initOAuthClient({ apiKey: API_KEY });
+        });
+
+        document.addEventListener("gapi-loaded", (e) => {
+          loadData();
+        });
+      }
+    }
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+</html>
